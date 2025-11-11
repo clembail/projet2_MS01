@@ -1,0 +1,14 @@
+# ignorer le dossier build
+build
+
+# ignorer le fichier DS_Store
+.DS_Store
+
+# ignorer le dossier .vscode
+.vscode
+
+#ignorer le dossier .cache
+.cache
+
+#ignorer les maillages
+*.mesh
