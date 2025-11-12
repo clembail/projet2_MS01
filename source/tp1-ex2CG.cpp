@@ -25,7 +25,8 @@ std::vector<double> cgsolve(const CooMatrix<double>&   A,
 {
     
   // Vérification des dimensions
-  assert((NbCol(A)==NbRow(A)) && (b.size()==NbCol(A)) && (b.size()==u_exact.size()) );
+  assert((NbCol(A)==NbRow(A)) && 
+        (b.size()==NbCol(A)) && (b.size()==u_exact.size()) );
  
   // 1. Initialisation
   x.assign(b.size(), 0.0); // x_0 = 0
@@ -36,7 +37,7 @@ std::vector<double> cgsolve(const CooMatrix<double>&   A,
   double r2_old = std::pow(Norm(r), 2); // r_0^T * r_0
   double r2_new = r2_old;
   
-  double eps2 = 1.e-16 * r2_old; 
+  double eps2 = 1.e-12 * r2_old; 
   
   double alpha, beta, pAp;
   std::vector<double> relative_errors;
