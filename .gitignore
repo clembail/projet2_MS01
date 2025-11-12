@@ -12,3 +12,6 @@ build
 
 #ignorer les maillages
 *.mesh
+
+#ignoreer le git ignorer
+.gitignore
