@@ -7,6 +7,10 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <functional> // <--- AJOUT 1 : Pour std::function
+
+template <typename VALUE_TYPE> 
+class DenseMatrix; 
 
 template <typename ValueType>
 bool less_col(const std::tuple<std::size_t, std::size_t, ValueType>& a,
