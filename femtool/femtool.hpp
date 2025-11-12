@@ -13,5 +13,6 @@
 #include "directsolver.hpp"
 #include "iterativesolver.hpp"
 #include "preconditioner.hpp"
+#include "partition.hpp"
 
 #endif

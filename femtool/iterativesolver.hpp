@@ -47,9 +47,10 @@ cgsolve(const CooMatrix<double>&   A,
     
 }
 
+template <typename PrecondType>
 std::vector<double>
 pcgsolve(const CooMatrix<double>&   A,
-  const CooMatrix<double>& P,
+  const PrecondType&     P,
 	const std::vector<double>& b) {
     
   assert((NbCol(A)==NbRow(A)) &&
