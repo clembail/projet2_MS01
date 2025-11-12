@@ -7,7 +7,7 @@
 # La liste des finesses de maillage (h) à générer
 H_VALUES=(0.05 0.025 0.01 0.005 0.0025 0.001)
 #
-CPP_EXECUTABLE="./build/solveur"
+CPP_EXECUTABLE="./build/tp2-ex1"
 
 
 # =======================================================
@@ -39,7 +39,7 @@ for h in "${H_VALUES[@]}"; do
 
     # Définir les noms de fichiers dynamiquement
     MESH_FILE="./solutions/mesh_h_${h}.mesh"
-    CSV_FILE="results_h_${h}.csv"
+    CSV_FILE="./results_PCG/results_h_${h}.csv"
 
     # --- Lancement du solveur C++ ---
     echo "2. Lancement du solveur C++..."
