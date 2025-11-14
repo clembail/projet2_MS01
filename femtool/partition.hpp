@@ -8,7 +8,8 @@
 
 using Mesh2DPart = std::vector<Mesh2D>;
 
-std::pair< Mesh2DPart,CooMatrix<double> > Partition4(const Mesh2D& Omega){
+std::pair< Mesh2DPart,CooMatrix<double> > 
+Partition4(const Mesh2D& Omega){
     auto nodes = Omega.nodes();
     Mesh2D subMesh01 = nodes;
     Mesh2D subMesh02 = nodes;
@@ -52,12 +53,79 @@ std::pair< Mesh2DPart,CooMatrix<double> > Partition4(const Mesh2D& Omega){
     return {Sigma, Q};
 };
 
-std::pair< Mesh2DPart,CooMatrix<double> >
-Partition4(const Mesh2D& Omega, const std::size_t& nl){
-    Mesh2DPart Sigma;
-    CooMatrix<double> R;
-    return {Sigma, R}
-};
+// Surcharge de la fonction Partition4
+std::pair<std::vector<Mesh2D>, CooMatrix<double>> 
+Partition4(const Mesh2D& Omega, const std::size_t& nl) {
+
+    // 1. Récupérer la partition de base (sans recouvrement)
+    auto [Sigma, Q] = Partition4(Omega);
+
+    std::vector<Mesh2D> Gamma;
+    Gamma.reserve(4);
+    CooMatrix<double> R(Omega.size(), 4);
+
+    // Pré-traitement de Q pour récupérer les listes d'éléments initiaux
+    std::vector<std::vector<std::size_t>> elements_in_p(4);
+    
+    for(const auto& [row, col, val] : GetData(Q)) {
+        if (val > 0.0) {
+            elements_in_p[col].push_back(row);
+        }
+    }
+
+    // Boucle principale sur les 4 sous-domaines
+    for(std::size_t p = 0; p < 4; ++p) {
+        
+        // Initialisation avec les données de Q
+        std::vector<std::size_t> current_elements = elements_in_p[p];
+
+        std::vector<bool> is_in_gamma(Omega.size(), false);
+        for(auto idx : current_elements) {
+            is_in_gamma[idx] = true;
+        }
+
+        // Ajout des couches (Overlap)
+        auto nodes = Omega.nodes();
+        
+        for(std::size_t layer = 0; layer < nl; ++layer) {
+            std::vector<bool> active_nodes(nodes.size(), false);
+            for(auto elt_idx : current_elements) {
+                const auto& e = Omega[elt_idx];
+                active_nodes[int(&e[0] - &nodes[0])] = true;
+                active_nodes[int(&e[1] - &nodes[0])] = true;
+                active_nodes[int(&e[2] - &nodes[0])] = true;
+            }
+
+            for(std::size_t k = 0; k < Omega.size(); ++k) {
+                if(is_in_gamma[k]) continue; 
+
+                const auto& e = Omega[k];
+                if( active_nodes[int(&e[0] - &nodes[0])] || 
+                    active_nodes[int(&e[1] - &nodes[0])] || 
+                    active_nodes[int(&e[2] - &nodes[0])] ) {
+                    
+                    is_in_gamma[k] = true;
+                    current_elements.push_back(k);
+                }
+            }
+        }
+
+        // Construction de Gamma[p] et remplissage de R
+        Mesh2D mesh_p(nodes);
+        
+        for(auto global_idx : current_elements) {
+            mesh_p.push_back(Omega[global_idx]);
+            
+            double local_idx = (double)(mesh_p.size() - 1);
+            R.push_back(global_idx, p, local_idx);
+        }
+        
+        Gamma.push_back(mesh_p);
+    }
+    
+    R.sort();
+    return {Gamma, R};
+}
 
 void Plot(const std::vector<Mesh2D>& Sigma,
     std::filesystem::path    filename){
@@ -98,13 +166,6 @@ void Plot(const std::vector<Mesh2D>& Sigma,
     for(const auto& x:v){
         f << x << "\t1\n";
     }
-    f << "\n";
-    // for (std::size_t i = 0; i < nb_domains; i++){   
-    //     auto v = Sigma[i].nodes();
-    //     for(const auto& x:v){
-    //         f << x << "\t1\n"; 
-    //     }
-    // }
     f << "\n";
 
     // Section elements
