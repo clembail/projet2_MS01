@@ -10,8 +10,9 @@ build
 #ignorer le dossier .cache
 .cache
 
-#ignorer les maillages
+#ignorer les maillages et les solutions
 *.mesh
+*.sol
 
-#ignoreer le git ignorer
+#ignorer le git ignorer
 .gitignore
