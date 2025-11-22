@@ -7,6 +7,8 @@
 #include <memory>
 #include <vector>
 #include <filesystem>
+#include "element.hpp"
+#include "nodes.hpp"
 
 template <std::size_t DIM>
 class Mesh{

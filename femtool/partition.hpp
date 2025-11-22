@@ -3,11 +3,14 @@
 
 #include "coomatrix.hpp"
 #include "element.hpp"
+#include "fespace.hpp"
 #include "mesh.hpp"
 #include <cstddef>
 #include <tuple>
 
 using Mesh2DPart = std::vector<Mesh2D>;
+using FeSpace2D = FeSpace<2>;
+using FeSpace2DxCoo = std::pair<FeSpace2D,CooMatrix<double>>;
 
 std::pair< Mesh2DPart,CooMatrix<double> > 
 Partition4(const Mesh2D& Omega){
@@ -319,6 +322,32 @@ Partition16(const Mesh2D& Omega, const std::size_t& nl) {
     
     R.sort();
     return {Gamma, R};
-}
+}     
+
+FeSpace2DxCoo Restrict(const FeSpace2D& Vh, 
+    const Mesh2D& Gamma, 
+    const std::vector<std::size_t>& tbl){
+        auto Uh = FeSpace(Gamma);
+        CooMatrix<double> P(dim(Uh),dim(Vh));
+        
+        for (std::size_t j= 0; j < Gamma.size(); j++){
+            std::size_t k = tbl[j];
+            
+            auto cell_Uh = Uh[j];
+            auto cell_Vh = Vh[k];
+
+            for (std::size_t i=0; i < cell_Uh.size(); i++){
+                std::size_t row = cell_Uh[i];
+                std::size_t col = cell_Vh[i];
+                
+                P.push_back(row,col,1.0);
+            }
+        }
+        P.sort();
+        for (auto& [r,c,v] : GetData(P)){
+            v = 1.0;
+        }
+        return {Uh,P};
+    }
 
 #endif

@@ -2,6 +2,7 @@
 #define FEMATRIX_HPP
 
 #include "coomatrix.hpp"
+#include "fespace.hpp"
 
 
 template <std::size_t DIM>

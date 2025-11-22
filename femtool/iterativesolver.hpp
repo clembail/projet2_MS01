@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <type_traits>
 #include <vector>
+#include "coomatrix.hpp"
 
 std::vector<double>
 cgsolve(const CooMatrix<double>&   A,

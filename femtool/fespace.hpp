@@ -8,6 +8,8 @@
 #include <filesystem>
 #include <type_traits>
 #include "element.hpp"
+#include "mesh.hpp"
+#include "coomatrix.hpp"
 
 //###########################//
 //   Cellule element fini    //
