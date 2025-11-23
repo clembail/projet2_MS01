@@ -69,7 +69,6 @@ void Plot(const std::vector<Mesh2D>& Sigma,
     std::vector<std::string> tag =
     {"Vertices", "Edges", "Triangles", "Tetrahedra"};
     
-    // Écriture du fichier .mesh pour vizir4 et gmsh
     filename.replace_extension(".mesh");
     std::ofstream f;
     f.open(filename.c_str());
@@ -112,7 +111,6 @@ void Plot(const std::vector<Mesh2D>& Sigma,
     f << "\nEnd";
     f.close();
 
-    // Écriture du fichier .sol pour vizir4
     filename.replace_extension(".sol");
     std::ofstream f_sol;
     f_sol.open(filename.c_str());
@@ -140,7 +138,6 @@ void Plot(const std::vector<Mesh2D>& Sigma,
 std::pair<std::vector<Mesh2D>, CooMatrix<double>> 
 Partition4(const Mesh2D& Omega, const std::size_t& nl) {
 
-    // Récupérer la partition de base (sans recouvrement)
     auto [Sigma, Q] = Partition4(Omega);
 
     std::vector<Mesh2D> Gamma;
@@ -322,7 +319,13 @@ Partition16(const Mesh2D& Omega, const std::size_t& nl) {
     
     R.sort();
     return {Gamma, R};
-}     
+}
+
+/////////
+// TP3 //
+/////////
+
+// EXERCICE 1
 
 FeSpace2DxCoo Restrict(const FeSpace2D& Vh, 
     const Mesh2D& Gamma, 
@@ -349,5 +352,59 @@ FeSpace2DxCoo Restrict(const FeSpace2D& Vh,
         }
         return {Uh,P};
     }
+
+std::vector<FeSpace2DxCoo>
+Partition4(const FeSpace2D& Vh, const std::size_t& nl){
+
+    auto Omega = Vh.mesh();
+    auto [Gamma,R] = Partition4(Omega,nl);
+
+    std::vector<FeSpace2DxCoo> result;
+    result.reserve(Gamma.size());
+
+    std::vector<std::vector<std::size_t>> tbl(Gamma.size());
+
+    for (int p = 0; p < Gamma.size();p++){
+        tbl[p].resize(Gamma[p].size());
+    }
+
+    for (auto& [j,p,vDouble] : GetData(R)){
+        std::size_t v = static_cast<std::size_t>(vDouble); //conversion du double en size_t
+        tbl[p][v] = j;
+    }
+
+    for (int p=0; p < Gamma.size(); p++){
+        result.push_back(Restrict(Vh, Gamma[p], tbl[p]));
+    }
+
+    return result;
+}
+
+std::vector<FeSpace2DxCoo>
+Partition16(const FeSpace2D& Vh, const std::size_t& nl){
+
+    auto Omega = Vh.mesh();
+    auto [Gamma,R] = Partition16(Omega,nl);
+
+    std::vector<FeSpace2DxCoo> result;
+    result.reserve(Gamma.size());
+
+    std::vector<std::vector<std::size_t>> tbl(Gamma.size());
+
+    for (int p = 0; p < Gamma.size();p++){
+        tbl[p].resize(Gamma[p].size());
+    }
+
+    for (auto& [j,p,vDouble] : GetData(R)){
+        std::size_t v = static_cast<std::size_t>(vDouble); //conversion du double en size_t
+        tbl[p][v] = j;
+    }
+
+    for (int p=0; p < Gamma.size(); p++){
+        result.push_back(Restrict(Vh, Gamma[p], tbl[p]));
+    }
+
+    return result;
+}
 
 #endif

@@ -143,8 +143,6 @@ template <typename T, std::size_t D>
 void Normalize(SmallVector<T,D>& x){
   x *= 1./Norm(x);}
 
-
-
 auto
 VProd(const SmallVector<double,3>& v,
       const SmallVector<double,3>& w){

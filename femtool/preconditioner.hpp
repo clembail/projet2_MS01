@@ -5,6 +5,7 @@
 #include <Eigen/IterativeLinearSolvers>
 #include "coomatrix.hpp"
 #include "directsolver.hpp"
+#include "partition.hpp"
 
 class CholeskyPrec{
 
@@ -68,8 +69,49 @@ private:
   
 };
 
+/////////
+// TP3 //
+/////////
 
+// EXERCICE 2 
 
+class AdditiveSchwarz{
+
+public:
+  using ValueType = double;
+  using ItemType = std::pair<InvCooMatrix<ValueType>,CooMatrix<ValueType>>;
+
+  AdditiveSchwarz(const CooMatrix<ValueType>& A,
+    const std::vector<CooMatrix<ValueType>> R)
+    {
+      InvAxR.reserve(R.size());
+
+      for (const auto& Rj : R){
+        auto InvAj(Inv( Rj*A*(Rj.T()) ));
+        InvAxR.push_back(std::make_pair(std::move(InvAj), Rj));
+      }
+    }
+
+  auto operator*(const std::vector<ValueType>& u) const {
+
+    std::vector<ValueType> v (u.size(),0.0);
+
+    for (const auto& [InvAj,Rj]: InvAxR){
+      auto temp = Rj*u;
+      auto temp2 = InvAj*temp;
+      auto term = Rj.T()*temp2;
+
+      for (int i=0; i < u.size(); i++){
+        v[i] += term[i];
+      }
+    }
+
+    return v;
+  }
+
+private:
+  std::vector<ItemType> InvAxR;
+};
 
 
 #endif
