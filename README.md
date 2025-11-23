@@ -17,8 +17,11 @@ in the directory "example". To compile/execute this example:
 The example code should produce two output files named "output.mesh"
 and "output.sol". You can vizualize them with vizir4.
 
+All the plots in this projet were obtained with Python and matplotlib.
+
 ## Author
 [Xavier Claeys](https://claeys.pages.math.cnrs.fr/)
+[Clément Baillet](www.linkedin.com/in/clément-b-b71566135)
 
 ## License
 This software is under [LGPL](https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License)
