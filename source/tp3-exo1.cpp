@@ -4,7 +4,7 @@
 #include <femtool.hpp>
 
 int main(){
-    std::string input = "./solutions/mesh_h_0.01_partition4.mesh";
+    std::string input = "./tp/solutions/mesh_h_0.01_partition4.mesh";
 
     Mesh2D Omega;
     Read(Omega, input);
@@ -31,7 +31,7 @@ int main(){
 
     auto fhRestricted = P*fh;
 
-    Plot(Uh,fhRestricted, "./solutions/tp3-ex1");
+    Plot(Uh,fhRestricted, "./tp/solutions/tp3-exo1");
 
     return 0;
 }

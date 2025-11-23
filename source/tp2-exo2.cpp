@@ -13,9 +13,7 @@ int main(int argc,char* argv[]){
     Mesh2D Omega;
     Read(Omega, input);
 
-    ////////////////////////////
     // Test partitionnement en 4
-    ////////////////////////////
     std::cout << "=========================================================================" << std::endl;
 
     std::cout << "Partitionnement du maillage en 4" << std::endl;
@@ -24,9 +22,7 @@ int main(int argc,char* argv[]){
     std::cout << "Création du maillage prenant en compte le partionnement" << std::endl;
     Plot(Sigma4, output4);
 
-    //////////////////////////////////////////////
     // TEST partitionnement en 4 avec recouvrement
-    //////////////////////////////////////////////
     std::cout << "=========================================================================" << std::endl;
 
     std::cout << "Partitionnement du maillage en 4 avec recouvrement (nl==2)" << std::endl;
@@ -52,9 +48,7 @@ int main(int argc,char* argv[]){
     assert(total_size_gamma4 == Nnz(R4));
     assert(total_size_gamma4 > Omega.size());
 
-    /////////////////////////////
     // TEST partitionnement en 16
-    /////////////////////////////
     std::cout << "=========================================================================" << std::endl;
 
     std::cout << "Partitionnement du maillage en 16" << std::endl;
@@ -80,9 +74,7 @@ int main(int argc,char* argv[]){
     std::cout << "Q16 Row Sum -> Min: " << min_sum << " Max: " << max_sum << std::endl;
     assert(std::abs(min_sum - 1.0) < 1e-9 && std::abs(max_sum - 1.0) < 1e-9);
 
-    ///////////////////////////////////////////////
     // TEST partitionnement en 16 avec recouvrement
-    ///////////////////////////////////////////////
     std::cout << "=========================================================================" << std::endl;
 
     std::cout << "Partitionnement du maillage en 16 avec recouvrement (nl == 2)" << std::endl;
