@@ -178,7 +178,6 @@ std::vector<double> pcgsolve(const CooMatrix<double>&   A,
 {
     
   assert((NbCol(A)==NbRow(A)) && 
-        (NbCol(P)==NbRow(P))  &&
         (b.size()==NbCol(A))  && (b.size()==u_exact.size()) );
 
   auto    x   = std::vector<double>(b.size(),0.);
@@ -253,8 +252,7 @@ std::vector<double> pcgsolve_history(const CooMatrix<double>& A,
                                      double tol = 1e-10,
                                      int max_iter = 1000) {
   assert((NbCol(A)==NbRow(A)) && 
-        (NbCol(P)==NbRow(P))  &&
-        (b.size()==NbCol(A))  && (b.size()==u_exact.size()) );
+        (b.size()==NbCol(A)) );
 
   auto    x   = std::vector<double>(b.size(),0.);
   auto    r   = b-A*x;
@@ -301,7 +299,7 @@ std::vector<double> pcgsolve_history(const CooMatrix<double>& A,
     r2    = std::pow(Norm(r),2);
     z     = P*r;
     rz    = std::real((r|z));
-    beta *= rz;
+    beta *= rz; 
     p     = beta*p+z;
 
     relative_errors.push_back(Norm(r) / Norm(b));
