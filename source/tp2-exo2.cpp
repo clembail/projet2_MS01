@@ -31,7 +31,7 @@ int main(int argc,char* argv[]){
     std::cout << "Création du maillage prenant en compte le partionnement" << std::endl;
     Plot(Gamma4, output4o);
 
-    // Vérification Géométrique
+    
     for(int p=0; p<4; ++p) {
         std::string name = "./solutions/partition/gamma4_" + std::to_string(p);
         Write(Gamma4[p], name);
