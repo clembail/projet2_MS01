@@ -57,13 +57,14 @@ iter_valuesPCG = [r[1] for r in results]
 
 # 3. Tracer (répond à Q6)
 plt.figure(figsize=(10, 7))
-plt.plot(h_values, iter_valuesCG, 'o-')
-plt.plot(h_values, iter_valuesPCG, 'o-')
+plt.plot(h_values, iter_valuesCG, 'o-', label="Gradient Conjugué")
+plt.plot(h_values, iter_valuesPCG, 'o-', label="Gradient Conjugué Préconditionné")
 plt.title("Nombre d'itérations CG vs. Finesse du maillage (h)")
 plt.xlabel("Finesse du maillage (h)")
 plt.ylabel("Nombre d'itérations (pour atteindre 10e-6)")
 plt.xscale('log') # Souvent utile de voir h en log
 plt.yscale('log') # Souvent utile de voir les itérations en log
 plt.grid(True, which="both")
+plt.legend()
 plt.savefig("tp2_ex1_question_3.png")
 print("Graphique 'tp2_ex1_question_3' sauvegardé.")
